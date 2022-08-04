@@ -4,7 +4,7 @@ export default class PortfolioController {
     static async apiUpdatePortfolio(req, res, next) {
         try {
             const portfolioResponse = await PortfolioDAO.updatePortfolio(
-                req.body._id,
+                req.body.user_id,
                 req.body.portfolio
             )
 
@@ -20,8 +20,8 @@ export default class PortfolioController {
 
     static async apiGetPortfolio(req, res, next) {
         try {
-            let id = req.params.userId;
-            let portfolio = await PortfolioDAO.getportfolio(id);
+            let id = req.body.user_id;
+            let portfolio = await PortfolioDAO.getPortfolio(id);
             if (!portfolio) {
                 res.status(404).json({ error: "not found" });
                 return;

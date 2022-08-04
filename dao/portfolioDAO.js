@@ -1,22 +1,21 @@
-let myPortfolio;
+let myPortfolios;
 
 export default class PortfolioDAO {
 
     static async injectDB(conn) {
-        if (myPortfolio) {
+        if (myPortfolios) {
             return;
         }
         try {
-            myPortfolio = await conn.db(process.env.PHOTOREVIEWS_NS)
-                .collection('portfolio');
+            myPortfolios = await conn.db(process.env.PHOTO_NS).collection('myportfolio');
         } catch (e) {
             console.error(`Unable to connect in portfolioDAO: ${e}`);
         }
     }
 
-    static async updateportfolio(userId, portfolio) {
+    static async updatePortfolio(user_id, portfolio) {
         try {
-            const updateResponse = await myPortfolio.updateOne({ _id: userId }, { $set: { portfolio: portfolio } }, { upsert: true })
+            const updateResponse = await myPortfolios.updateOne({ _id: user_id }, { $set: { portfolio: portfolio } }, { upsert: true })
             return updateResponse;
         } catch (e) {
             console.log(`Unable to update portfolio: ${e}`);
@@ -24,14 +23,15 @@ export default class PortfolioDAO {
         }
     }
 
-    static async getPortfolio(id) {
+    static async getPortfolio(user_id) {
+
         let cursor;
         try {
-            cursor = await myPortfolio.find({
-                _id: id
+            cursor = await myPortfolios.find({
+                _id: user_id
             });
             const portfolio = await cursor.toArray();
-            return portfolio[0];
+            return portfolio[0].portfolio;
         } catch (e) {
             console.error(`Something went wrong in getFavorties: ${e}`);
             throw e;

@@ -1,41 +1,28 @@
 import mongodb, { ObjectId } from "mongodb";
 const objectId = mongodb.ObjectId;
 
-let photo;
+let photos;
 
 export default class PhotoDAO {
     static async injectDB(conn) {
-        if (photo) {
+        if (photos) {
             return;
         }
         try {
-            photo = await conn.db(process.env.PHOTOREVIEWS_NS).collection('photo');
+            photos = await conn.db(process.env.PHOTO_NS).collection('photo');
         } catch (e) {
             console.error(`Unable to connect in PhotoDao: ${e}`);
         }
     }
 
     static async getPhoto({
-        filters = null,
         page = 0,
         photoPerPage = 20,
     } = {}) {
-        let query;
-        if (filters) {
-            if ("title" in filters) {
-                query = { $text: { $search: filters['title'] } };
-            } else if ("rated" in filters) {
-                query = { "rated": { $eq: filters['rated'] } }
-            }
-        }
 
-        let cursor;
         try {
-            cursor = await photo.find(query)
-                .limit(photoPerPage)
-                .skip(photoPerPage * page);
-            const photoList = await cursor.toArray();
-            const totalNumPhoto = await photo.countDocuments(query);
+            const photoList = await photos.find().toArray();
+            const totalNumPhoto = await photos.countDocuments();
             return { photoList, totalNumPhoto };
         } catch (e) {
             console.error(`Unable to issue find command, ${e}`);
@@ -45,7 +32,7 @@ export default class PhotoDAO {
 
     static async getPhotoById(id) {
         try {
-            return await photo.aggregate([{
+            return await photos.aggregate([{
                     $match: {
                         _id: new ObjectId(id),
                     }
@@ -65,7 +52,33 @@ export default class PhotoDAO {
         }
     }
 
-    static async addPhoto(id) {}
+    static async addPhoto(user_name, user_id, img, date) {
+        try {
+            const photo = {
+                user_name: user_name,
+                user_id: user_id,
+                img: img,
+                date: date,
+                like: [],
+            }
+            const info = await photos.insertOne(photo);
+            return info.insertedId;
+        } catch (e) {
+            console.error(`Unable to post photo: ${e}`);
+            return { error: e };
+        }
+    }
 
-    static async deletePhoto(id) {}
+    static async deletePhoto(photoID, userId) {
+        try {
+            const deleteResponse = await photos.deleteOne({
+                _id: ObjectId(photoID),
+                user_id: userId,
+            });
+            return deleteResponse;
+        } catch (e) {
+            console.error(`Unable to delete photo: ${e}`);
+            return { error: e };
+        }
+    }
 }

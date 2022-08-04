@@ -7,19 +7,11 @@ export default class PhotoController {
             parseInt(req.query.photoPerPage) : 20;
         const page = req.query.page ? parseInt(req.query.page) : 0;
 
-        let filters = {}
-        if (req.query.rated) {
-            filters.rated = req.query.rated;
-        } else if (req.query.title) {
-            filters.title = req.query.title;
-        }
-
-        const { photoList, totalNumphoto } = await PhotoDAO.getphoto({ filters, page, photoPerPage });
+        const { photoList, totalNumphoto } = await PhotoDAO.getPhoto({ page, photoPerPage });
 
         let response = {
             photo: photoList,
             page: page,
-            filters: filters,
             entries_per_page: photoPerPage,
             total_results: totalNumphoto,
         };
@@ -28,8 +20,9 @@ export default class PhotoController {
 
     static async apiGetPhotoById(req, res, next) {
         try {
+            console.log(req.params);
             let id = req.params.id || {}
-            let photo = await PhotoDAO.getphotoById(id);
+            let photo = await PhotoDAO.getPhotoById(id);
             if (!photo) {
                 res.status(404).json({ error: "not found" });
                 return;
@@ -41,8 +34,49 @@ export default class PhotoController {
         }
     }
 
-    static async apiPostPhoto(req, res, next) {}
+    static async apiPostPhoto(req, res, next) {
+        try {
+            const name = req.body.user_name;
+            const id = req.body.user_id;
+            const img = req.body.img;
+            const date = new Date();
+            const photoId = await PhotoDAO.addPhoto(
+                name,
+                id,
+                img,
+                date
+            );
+            var { error } = photoId;
+            console.log(error);
+            if (error) {
+                res.status(500).json({ error: "Unable to post photo." });
+            } else {
+                res.json(photoId);
+            }
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
 
-    static async apiDeletePhoto(req, res, next) {}
+    static async apiDeletePhoto(req, res, next) {
+        try {
+            const photo_id = req.body.photo_id;
+            const user_id = req.body.user_id;
+            const photoResponse = await PhotoDAO.deletePhoto(
+                photo_id,
+                user_id
+            );
+            var { error } = photoResponse;
+            console.log(error);
+            if (error) {
+                res.status(500).json({ error: "Unable to delete review." });
+            } else {
+                res.json({ status: "success" });
+            }
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+
+    }
 
 }
