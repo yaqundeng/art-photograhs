@@ -6,5 +6,9 @@ In the next week, Wen and Yichen will work on the backend together. Wen will foc
 
 Our team communicates with each other frequently, and the process is going smoothly.
 
+This is the backend: https://artportfolio-backend.herokuapp.com/
+
+This is the frontend: https://artportfolio-frontend.herokuapp.com/
+
 ![image](https://media.github.ccs.neu.edu/user/9542/files/ae2ba56b-7d53-4504-a1d9-49a67827707e)
 ![image](https://media.github.ccs.neu.edu/user/9542/files/ea9ecf43-3fcb-4ec3-9f22-b864d2aa5aa4)
