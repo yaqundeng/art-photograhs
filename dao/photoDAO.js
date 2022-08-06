@@ -15,15 +15,16 @@ export default class PhotoDAO {
         }
     }
 
-    static async getPhoto({
-        page = 0,
-        photoPerPage = 20,
-    } = {}) {
-
+    static async getPhoto(newest = false, oldest = false) {
         try {
-            const photoList = await photos.find().toArray();
-            const totalNumPhoto = await photos.countDocuments();
-            return { photoList, totalNumPhoto };
+            const allphoto = await photos.find().toArray();
+            let photoList = allphoto.sort((a, b) => a.like.length > b.like.length ? -1 : 1);
+            if (newest) {
+                photoList = allphoto.sort((a, b) => b.date - a.date);
+            } else if (oldest) {
+                photoList = allphoto.sort((a, b) => a.date - b.date);
+            }
+            return photoList;
         } catch (e) {
             console.error(`Unable to issue find command, ${e}`);
             return { photoList: [], totalNumPhoto: 0 };
