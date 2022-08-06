@@ -7,7 +7,7 @@ export default class PortfolioDAO {
             return;
         }
         try {
-            myPortfolios = await conn.db(process.env.PHOTO_NS).collection('myportfolio');
+            myPortfolios = await conn.db(process.env.PHOTO_NS).collection('my_portfolio');
         } catch (e) {
             console.error(`Unable to connect in portfolioDAO: ${e}`);
         }
