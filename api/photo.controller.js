@@ -3,24 +3,19 @@ import PhotoDAO from "../dao/photoDAO.js";
 export default class PhotoController {
 
     static async apiGetPhoto(req, res, next) {
-        const photoPerPage = req.query.photoPerPage ?
-            parseInt(req.query.photoPerPage) : 20;
-        const page = req.query.page ? parseInt(req.query.page) : 0;
-
-        const { photoList, totalNumphoto } = await PhotoDAO.getPhoto({ page, photoPerPage });
-
-        let response = {
-            photo: photoList,
-            page: page,
-            entries_per_page: photoPerPage,
-            total_results: totalNumphoto,
-        };
-        res.json(response);
+        try {
+            const newest = req.body.newest;
+            const oldest = req.body.oldest;
+            const photoList = await PhotoDAO.getPhoto(newest, oldest);
+            res.json(photoList);
+        } catch (e) {
+            console.log(`API, ${e}`);
+            res.status(500).json({ error: e });
+        }
     }
 
     static async apiGetPhotoById(req, res, next) {
         try {
-            console.log(req.params);
             let id = req.params.id || {}
             let photo = await PhotoDAO.getPhotoById(id);
             if (!photo) {
@@ -38,12 +33,14 @@ export default class PhotoController {
         try {
             const name = req.body.user_name;
             const id = req.body.user_id;
-            const img = req.body.img;
+            const photo_name = req.body.photo_name;
+            const filePath = req.body.filePath;
             const date = new Date();
             const photoId = await PhotoDAO.addPhoto(
                 name,
                 id,
-                img,
+                photo_name,
+                filePath,
                 date
             );
             var { error } = photoId;
