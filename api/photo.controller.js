@@ -33,12 +33,14 @@ export default class PhotoController {
         try {
             const name = req.body.user_name;
             const id = req.body.user_id;
-            const img = req.body.img;
+            const photo_name = req.body.photo_name;
+            const filePath = req.body.filePath;
             const date = new Date();
             const photoId = await PhotoDAO.addPhoto(
                 name,
                 id,
-                img,
+                photo_name,
+                filePath,
                 date
             );
             var { error } = photoId;
