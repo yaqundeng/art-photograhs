@@ -3,13 +3,13 @@ import AWS from 'aws-sdk';
 import fs from "fs";
 import { resolve } from "path";
 import { rejects } from "assert";
+import dotenv from "dotenv";
 const objectId = mongodb.ObjectId;
 
+dotenv.config();
 const s3 = new AWS.S3({
-    // accessKeyId: process.env.AWS_S3_KEY_ID,
-    // secretAccessKey: process.env.AWS_S3_KEY
-    accessKeyId: "AKIAQ4UURO45EE4ZEOHH",
-    secretAccessKey: "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"
+    accessKeyId: process.env.AWS_S3_KEY_ID,
+    secretAccessKey: process.env.AWS_S3_KEY
 });
 
 let photos;
@@ -70,7 +70,7 @@ export default class PhotoDAO {
             return new Promise((resolve, reject) => {
                 const fileContent = fs.createReadStream(filePath);
                 const params = {
-                    Bucket: "myphotowebsitehw",
+                    Bucket: process.env.AWS_BUCKET_NAME,
                     Key: AWSKey, // File name you want to save as in S3
                     ContentType: 'image/png',
                     Body: fileContent
@@ -107,7 +107,7 @@ export default class PhotoDAO {
         try {
             const photo = await photos.findOne({ _id: ObjectId(photoID) });;
             var params = {
-                Bucket: "myphotowebsitehw",
+                Bucket: process.env.AWS_BUCKET_NAME,
                 Key: photo.AWSKey
             };
             s3.deleteObject(params, function(err, data) {

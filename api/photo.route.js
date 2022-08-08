@@ -3,8 +3,6 @@ import PhotoController from './photo.controller.js';
 import ReviewController from './reviews.controller.js';
 import PortfolioController from './portfolio.controller.js';
 
-import upload from './aws-s3.js';
-
 const router = express.Router();
 
 router.route("/").get(PhotoController.apiGetPhoto);
