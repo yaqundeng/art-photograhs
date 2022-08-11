@@ -20,9 +20,4 @@ router
     .get(PortfolioController.apiGetPortfolio)
     .put(PortfolioController.apiUpdatePortfolio);
 
-router.
-route("/upload").post(function(req, res) {
-    upload(req.body.path, req.body.user_id);
-})
-
 export default router;

@@ -3,7 +3,7 @@ import ReviewsDAO from "../dao/reviewsDAO.js";
 export default class ReviewsController {
     static async apiPostReview(req, res, next) {
         try {
-            const movieId = req.body.movie_id;
+            const photo_id = req.body.photo_id;
             const review = req.body.review;
             const userInfo = {
                 name: req.body.name,
@@ -13,7 +13,7 @@ export default class ReviewsController {
             const date = new Date();
 
             const reviewResponse = await ReviewsDAO.addReview(
-                movieId,
+                photo_id,
                 userInfo,
                 review,
                 date

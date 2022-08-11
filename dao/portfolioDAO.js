@@ -15,7 +15,7 @@ export default class PortfolioDAO {
 
     static async updatePortfolio(user_id, portfolio) {
         try {
-            const updateResponse = await myPortfolios.updateOne({ _id: user_id }, { $set: { portfolio: portfolio } }, { upsert: true })
+            const updateResponse = await myPortfolios.updateOne({ user_id: user_id }, { $set: { portfolio: portfolio } }, { upsert: true })
             return updateResponse;
         } catch (e) {
             console.log(`Unable to update portfolio: ${e}`);
@@ -28,7 +28,7 @@ export default class PortfolioDAO {
         let cursor;
         try {
             cursor = await myPortfolios.find({
-                _id: user_id
+                user_id: user_id
             });
             const portfolio = await cursor.toArray();
             return portfolio[0].portfolio;
