@@ -26,7 +26,7 @@ User can post, edit and delete reviews.
 <img width="1160" alt="image" src="https://media.github.ccs.neu.edu/user/9360/files/3ac3d906-6eaa-4149-bde2-309031e773c5">
 
 Collection my_portfolio contains all photos of each user.
-When user adds or deletes one photo, backend will return photo_id to frontend, and frontend will update my_portfolio.
+When user adds or deletes one photo, backend will return photo_id to frontend, and then frontend will update my_portfolio.
 
 <img width="1728" alt="image" src="https://media.github.ccs.neu.edu/user/9360/files/799ddb36-8b34-4814-ba4a-3d7da0038acb">
 
