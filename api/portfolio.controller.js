@@ -4,7 +4,6 @@ export default class PortfolioController {
     static async apiUpdatePortfolio(req, res, next) {
         try {
             const user_id = req.params.userId || req.body.user_id;
-            console.log(user_id);
             const portfolioResponse = await PortfolioDAO.updatePortfolio(
                 user_id,
                 req.body.portfolio
