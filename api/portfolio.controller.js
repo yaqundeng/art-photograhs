@@ -3,8 +3,10 @@ import PortfolioDAO from '../dao/portfolioDAO.js';
 export default class PortfolioController {
     static async apiUpdatePortfolio(req, res, next) {
         try {
+            const user_id = req.params.userId || req.body.user_id;
+            console.log(user_id);
             const portfolioResponse = await PortfolioDAO.updatePortfolio(
-                req.body.user_id,
+                user_id,
                 req.body.portfolio
             )
 
@@ -20,8 +22,8 @@ export default class PortfolioController {
 
     static async apiGetPortfolio(req, res, next) {
         try {
-            let id = req.body.user_id;
-            let portfolio = await PortfolioDAO.getPortfolio(id);
+            const user_id = req.params.userId || req.body.user_id;
+            let portfolio = await PortfolioDAO.getPortfolio(user_id);
             if (!portfolio) {
                 res.status(404).json({ error: "not found" });
                 return;

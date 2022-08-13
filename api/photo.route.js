@@ -5,16 +5,19 @@ import PortfolioController from './portfolio.controller.js';
 
 const router = express.Router();
 
-router.route("/").get(PhotoController.apiGetPhoto);
-router.route("/id/:id").get(PhotoController.apiGetPhotoById);
+router.route("/")
+    .get(PhotoController.apiGetPhoto)
+    .put(PhotoController.apiUpdatePhotoLike);
+
+
+router.route("/photo/:id").get(PhotoController.apiGetPhotoById);
 
 router.route("/review")
     .post(ReviewController.apiPostReview)
     .put(ReviewController.apiUpdateReview)
     .delete(ReviewController.apiDeleteReview);
 
-router
-    .route("/portfolio/:userId")
+router.route("/portfolio/:userId")
     .post(PhotoController.apiPostPhoto)
     .delete(PhotoController.apiDeletePhoto)
     .get(PortfolioController.apiGetPortfolio)

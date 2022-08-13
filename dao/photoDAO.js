@@ -42,11 +42,11 @@ export default class PhotoDAO {
         }
     }
 
-    static async getPhotoById(id) {
+    static async getPhotoById(photo_id) {
         try {
             return await photos.aggregate([{
                     $match: {
-                        _id: new ObjectId(id),
+                        _id: new ObjectId(photo_id),
                     }
                 },
                 {
@@ -103,9 +103,9 @@ export default class PhotoDAO {
         }
     }
 
-    static async deletePhoto(photoID, userId) {
+    static async deletePhoto(photo_id, user_id) {
         try {
-            const photo = await photos.findOne({ _id: ObjectId(photoID) });;
+            const photo = await photos.findOne({ _id: ObjectId(photo_id) });;
             var params = {
                 Bucket: process.env.AWS_BUCKET_NAME,
                 Key: photo.AWSKey
@@ -116,13 +116,23 @@ export default class PhotoDAO {
             });
 
             const deleteResponse = await photos.deleteOne({
-                _id: ObjectId(photoID),
-                user_id: userId,
+                _id: ObjectId(photo_id),
+                user_id: user_id,
             });
 
             return deleteResponse;
         } catch (e) {
             console.error(`Unable to delete photo: ${e}`);
+            return { error: e };
+        }
+    }
+
+    static async updatePhotoLike(photo_id, like) {
+        try {
+            const updateResponse = await photos.updateOne({ _id: ObjectId(photo_id) }, { $set: { like: like } }, { upsert: true })
+            return updateResponse;
+        } catch (e) {
+            console.log(`Unable to update portfolio: ${e}`);
             return { error: e };
         }
     }

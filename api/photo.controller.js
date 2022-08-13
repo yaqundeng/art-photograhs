@@ -16,8 +16,8 @@ export default class PhotoController {
 
     static async apiGetPhotoById(req, res, next) {
         try {
-            let id = req.params.id || {}
-            let photo = await PhotoDAO.getPhotoById(id);
+            let photo_id = req.params.id || req.body.photo_id || {}
+            let photo = await PhotoDAO.getPhotoById(photo_id);
             if (!photo) {
                 res.status(404).json({ error: "not found" });
                 return;
@@ -74,6 +74,22 @@ export default class PhotoController {
             res.status(500).json({ error: e.message });
         }
 
+    }
+
+    static async apiUpdatePhotoLike(req, res, next) {
+        try {
+            const response = await PhotoDAO.updatePhotoLike(
+                req.body.photo_id,
+                req.body.like
+            )
+            var { error } = response;
+            if (error) {
+                res.status(500).json({ error });
+            }
+            res.json({ status: "success" });
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
     }
 
 }

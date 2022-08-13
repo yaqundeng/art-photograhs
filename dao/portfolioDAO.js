@@ -24,7 +24,6 @@ export default class PortfolioDAO {
     }
 
     static async getPortfolio(user_id) {
-
         let cursor;
         try {
             cursor = await myPortfolios.find({
@@ -33,7 +32,7 @@ export default class PortfolioDAO {
             const portfolio = await cursor.toArray();
             return portfolio[0].portfolio;
         } catch (e) {
-            console.error(`Something went wrong in getFavorties: ${e}`);
+            console.error(`Something went wrong in getPortfolio: ${e}`);
             throw e;
         }
     }
