@@ -4,13 +4,16 @@ import fs from "fs";
 import { resolve } from "path";
 import { rejects } from "assert";
 import dotenv from "dotenv";
+import { s3 } from '../api/upload.controller.js';
 const objectId = mongodb.ObjectId;
 
-dotenv.config();
-const s3 = new AWS.S3({
-    accessKeyId: process.env.AWS_S3_KEY_ID,
-    secretAccessKey: process.env.AWS_S3_KEY
-});
+// dotenv.config();
+// const allowedTypes = ['jpg', 'png', 'jpeg'];
+// const s3 = new AWS.S3({
+//     accessKeyId: process.env.AWS_S3_KEY_ID,
+//     secretAccessKey: process.env.AWS_S3_KEY,
+//     region: process.env.AWS_REGION
+// }, allowedTypes);
 
 let photos;
 
@@ -64,34 +67,14 @@ export default class PhotoDAO {
         }
     }
 
-    static async addPhoto(user_name, user_id, photo_name = "", filePath, date) {
-        const AWSKey = user_id + " - " + date.toString() + ".png";
-        const uploadFile = (filePath) => {
-            return new Promise((resolve, reject) => {
-                const fileContent = fs.createReadStream(filePath);
-                const params = {
-                    Bucket: process.env.AWS_BUCKET_NAME,
-                    Key: AWSKey, // File name you want to save as in S3
-                    ContentType: 'image/png',
-                    Body: fileContent
-                };
-                s3.upload(params, function(err, data) {
-                    if (err) {
-                        throw err;
-                    }
-                    resolve(data.Location);
-                    console.log(`File uploaded successfully. ${data.Location}`);
-                });
-            })
-        }
-        const img = await uploadFile(filePath);
+    static async addPhoto(user_name, user_id, photo_name = "", filePath, AWSKey, date) {
         try {
             const photo = {
                 user_name: user_name,
                 user_id: user_id,
                 photo_name: photo_name,
                 AWSKey: AWSKey,
-                img: img,
+                img: filePath,
                 date: date,
                 like: [],
             }
@@ -105,7 +88,9 @@ export default class PhotoDAO {
 
     static async deletePhoto(photo_id, user_id) {
         try {
-            const photo = await photos.findOne({ _id: ObjectId(photo_id) });;
+
+            const photo = await photos.findOne({ _id: ObjectId(photo_id) });
+
             var params = {
                 Bucket: process.env.AWS_BUCKET_NAME,
                 Key: photo.AWSKey

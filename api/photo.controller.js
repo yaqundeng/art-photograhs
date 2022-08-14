@@ -34,13 +34,15 @@ export default class PhotoController {
             const name = req.body.user_name;
             const id = req.body.user_id;
             const photo_name = req.body.photo_name;
-            const filePath = req.body.filePath;
+            const AWSKey = req.file.key;
+            const filePath = req.file.location;
             const date = new Date();
             const photoId = await PhotoDAO.addPhoto(
                 name,
                 id,
                 photo_name,
                 filePath,
+                AWSKey,
                 date
             );
             var { error } = photoId;
@@ -73,7 +75,6 @@ export default class PhotoController {
         } catch (e) {
             res.status(500).json({ error: e.message });
         }
-
     }
 
     static async apiUpdatePhotoLike(req, res, next) {
