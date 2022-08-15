@@ -13,6 +13,7 @@ router.route("/")
 
 
 router.route("/photo/:id").get(PhotoController.apiGetPhotoById);
+router.route("/personalphotos").get(PhotoController.apiGetPhotosByIds);
 
 router.route("/review")
     .post(ReviewController.apiPostReview)

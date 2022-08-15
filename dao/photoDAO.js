@@ -121,4 +121,22 @@ export default class PhotoDAO {
             return { error: e };
         }
     }
+
+    static async getAllPhotosByIds(ids) {
+        try {
+            const helper = (ids) => {
+                return ids.map(function(id){ return new ObjectId(id)});
+            }
+
+            let cursor = await photos.find(
+                {"_id": {"$in" : helper(ids)}},
+            );
+
+            return cursor.toArray();
+        }catch(e) {
+            console.log(`Something went wrong in getAllPhotosByIds: ${e}`);
+            throw e;
+        }
+
+    }
 }

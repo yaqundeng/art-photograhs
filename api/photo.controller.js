@@ -93,4 +93,22 @@ export default class PhotoController {
         }
     }
 
+    static async apiGetPhotosByIds(req, res, next) {
+        try {
+            let ids = req.query["ids"] || {}
+            
+            console.log(ids);
+
+            let photosList = await PhotoDAO.getAllPhotosByIds(ids);
+
+            if(!photosList) {
+                res.status(404).json({error: "Not found"});
+                return;
+            }
+            res.json(photosList);
+        }catch(e) {
+            console.log(`API, ${e}`);
+            res.status(500).json({error: e});
+        }
+    }
 }
