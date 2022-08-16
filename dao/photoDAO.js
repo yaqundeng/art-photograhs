@@ -124,6 +124,11 @@ export default class PhotoDAO {
 
     static async getAllPhotosByIds(ids) {
         try {
+            if(Object.keys(ids).length === 0) {
+                console.log("There is no photo in the portfolio.")
+                return;
+            }
+
             const helper = (ids) => {
                 return ids.map(function(id){ return new ObjectId(id)});
             }
