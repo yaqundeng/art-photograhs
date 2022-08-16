@@ -102,7 +102,7 @@ export default class PhotoController {
             let photosList = await PhotoDAO.getAllPhotosByIds(ids);
 
             if(!photosList) {
-                res.status(404).json({error: "Not found"});
+                // res.status(404).json({error: "Not found"});
                 return;
             }
             res.json(photosList);
