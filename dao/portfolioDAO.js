@@ -15,6 +15,7 @@ export default class PortfolioDAO {
 
     static async updatePortfolio(user_id, portfolio) {
         try {
+            console.log(`updatePortfolioDao: ${portfolio}`);
             const updateResponse = await myPortfolios.updateOne({ user_id: user_id }, { $set: { portfolio: portfolio } }, { upsert: true })
             return updateResponse;
         } catch (e) {

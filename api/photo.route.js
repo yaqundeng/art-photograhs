@@ -26,10 +26,4 @@ router.route("/portfolio/:userId")
     .get(PortfolioController.apiGetPortfolio)
     .put(PortfolioController.apiUpdatePortfolio);
 
-router.route('/upload')
-    .post(upload.single('photo'), function(req, res, next) {
-        console.log('Uploaded!');
-        console.log(req);
-    });
-
 export default router;
