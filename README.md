@@ -32,6 +32,7 @@ When user adds or deletes one photo, backend will return photo_id to frontend, a
 
 <img width="1432" alt="image" src="https://media.github.ccs.neu.edu/user/9360/files/227040b9-e2ec-4533-85dc-63c876e944c6">
 
-
+In iteration 3, added one more api to get a list of data by a group of photo ids.
+ 
 
 
