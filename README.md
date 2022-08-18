@@ -34,5 +34,4 @@ When user adds or deletes one photo, backend will return photo_id to frontend, a
 
 In iteration 3, added one more api to get a list of data by a group of photo ids.
  
-
-
+![image](https://media.github.ccs.neu.edu/user/9542/files/48fa0cce-4b93-4ded-8432-8c2a65b86ae4)
